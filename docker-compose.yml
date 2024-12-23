@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  rabbitmq:
+    container_name: supersys_rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=uniqueerlangcookie
+    volumes:
+      - supersys-dev-rabbitmq:/var/lib/rabbitmq/mnesia
+
+volumes:
+  supersys-dev-rabbitmq:
