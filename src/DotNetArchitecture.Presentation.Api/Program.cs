@@ -1,5 +1,8 @@
+using DotNetArchitecture.Presentation.Api.Bootstrapping;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.UseNServiceBusSetup();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
