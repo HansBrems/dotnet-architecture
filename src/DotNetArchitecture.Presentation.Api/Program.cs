@@ -9,25 +9,35 @@ Log.Logger = new LoggerConfiguration()
 Log.Information("Starting up!");
 
 var builder = WebApplication.CreateBuilder(args);
+ConfigureServices(builder.Services, builder.Configuration);
 
 builder.UseNServiceBusSetup();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSignalR();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSerilogSetup(builder.Configuration);
 
-var app = builder.Build();
+var webApp = builder.Build();
+ConfigureMiddleware(webApp);
+webApp.Run();
 
-if (app.Environment.IsDevelopment())
+void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    services.AddControllers();
+    services.AddEndpointsApiExplorer();
+    services.AddCors();
+    services.AddSignalR();
+    services.AddSwaggerGen();
+    services.AddSerilogSetup(configuration);
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.MapHub<ProductHub>("/hubs/products");
-
-app.Run();
+void ConfigureMiddleware(WebApplication app)
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+    
+    app.UseCorsSetup();
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+    app.MapHub<ProductHub>("/hubs/products");
+}
