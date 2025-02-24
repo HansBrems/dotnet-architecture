@@ -1,4 +1,5 @@
 using DotNetArchitecture.Presentation.Api.Bootstrapping;
+using DotNetArchitecture.Presentation.Api.Hubs;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.UseNServiceBusSetup();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSignalR();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSerilogSetup(builder.Configuration);
 
@@ -26,5 +28,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<ProductHub>("/hubs/products");
 
 app.Run();
