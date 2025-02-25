@@ -21,7 +21,7 @@ void ConfigureServices(IServiceCollection services, ConfigurationManager configu
 {
     services.AddControllers();
     services.AddEndpointsApiExplorer();
-    services.AddCors();
+    services.AddCorsSetup();
     services.AddSignalR();
     services.AddSwaggerGen();
     services.AddSerilogSetup(configuration);
